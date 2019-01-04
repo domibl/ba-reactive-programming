@@ -1,0 +1,25 @@
+.sidenav-container {
+    height: 100%;
+}
+  
+.sidenav {
+    width: 200px;
+    box-shadow: 3px 0 6px rgba(0,0,0,0.24);
+}
+
+.sidenav a.active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+  
+.mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+}
+
+.content-margin{
+    margin: 15px;
+}
+
+.icon-label-margin{
+    margin-left: 5px;
+}

@@ -1,13 +1,28 @@
-var express = require('express');
+import { Application } from 'express';
+import { getAllDegreePrograms, getDegreeProgramById, getCoursesFiltered, saveCourse } from './server-functions';
 
-var app = express();
+const PORT = 3000;
+const express = require('express');
+const bodyParser = require('body-parser');
 
-var PORT = 3000;
+const app: Application = express();
 
-app.get('/', function(req, res) {
-    res.status(200).send('Hello world');
+app.use(bodyParser.json());
+
+// register routes
+app.route('/api/degree-programmes').get(getAllDegreePrograms);
+app.route('/api/degree-programmes/:id').get(getDegreeProgramById);
+app.route('/api/courses').get(getCoursesFiltered);
+app.route('/api/courses/:id').put(saveCourse);
+
+
+app.get('/', function (req, res) {
+    res.status(200).send('Server is running ...');
 });
 
-app.listen(PORT, function() {
-    console.log('Server is running on PORT:',PORT);
+const httpServer = app.listen(PORT, () => {
+    console.log("HTTP REST API Server running at http://localhost:" + httpServer.address().port);
 });
+
+
+
