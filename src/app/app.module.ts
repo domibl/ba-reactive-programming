@@ -13,8 +13,9 @@ import { PlaygroundComponent } from './playground/playground.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { DegreeProgrammesComponent } from './degree-programmes/degree-programmes.component';
+import { DegreeProgramsComponent } from './degree-programs/degree-programs.component';
 import { DegreeProgramDetailComponent } from './degree-program-detail/degree-program-detail.component';
+import { DegreeProgramDialogComponent } from './degree-program-dialog/degree-program-dialog.component';
 
 
 @NgModule({
@@ -22,8 +23,9 @@ import { DegreeProgramDetailComponent } from './degree-program-detail/degree-pro
         AppComponent,
         PlaygroundComponent,
         HomeComponent,
-        DegreeProgrammesComponent,
-        DegreeProgramDetailComponent
+        DegreeProgramsComponent,
+        DegreeProgramDetailComponent,
+        DegreeProgramDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -36,6 +38,7 @@ import { DegreeProgramDetailComponent } from './degree-program-detail/degree-pro
         ReactiveFormsModule
     ],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [DegreeProgramDialogComponent]
 })
 export class AppModule { }

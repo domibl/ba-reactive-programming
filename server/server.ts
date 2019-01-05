@@ -1,5 +1,5 @@
 import { Application } from 'express';
-import { getAllDegreePrograms, getDegreeProgramById, getCoursesFiltered, saveCourse } from './server-functions';
+import { getAllDegreePrograms, getDegreeProgramById, getCoursesFiltered, saveDegreeProgram } from './server-functions';
 
 const PORT = 3000;
 const express = require('express');
@@ -10,10 +10,10 @@ const app: Application = express();
 app.use(bodyParser.json());
 
 // register routes
-app.route('/api/degree-programmes').get(getAllDegreePrograms);
-app.route('/api/degree-programmes/:id').get(getDegreeProgramById);
+app.route('/api/degree-programs').get(getAllDegreePrograms);
+app.route('/api/degree-programs/:id').get(getDegreeProgramById);
+app.route('/api/degree-programs/:id').put(saveDegreeProgram);
 app.route('/api/courses').get(getCoursesFiltered);
-app.route('/api/courses/:id').put(saveCourse);
 
 
 app.get('/', function (req, res) {

@@ -1,7 +1,7 @@
 import { DegreeProgram } from "src/app/model/degree-program";
 import { Course } from "src/app/model/course";
 
-export const DEGREEPROGRAMMS: DegreeProgram[] = [
+export const DEGREEPROGRAMS: DegreeProgram[] = [
     {
         id: 1,
         title: "Software Engineering",
@@ -100,7 +100,7 @@ export const COURSES: Course[] = [
 
 
 export function findDegreeProgramById(degreeProgramId: number): DegreeProgram {
-    return DEGREEPROGRAMMS[degreeProgramId];
+    return DEGREEPROGRAMS[degreeProgramId];
 }
 
 export function findCoursesForDegreeProgram(degreeProgramId: number): Course[] {

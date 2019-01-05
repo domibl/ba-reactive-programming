@@ -1,19 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~@angular/material/theming';
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
-$custom-typography: mat-typography-config(
-  $font-family: 'Roboto'
-);
-
-@include mat-base-typography($custom-typography);
-@include mat-core($custom-typography);
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 
 body {
     margin: 0px;
-}
-
-*{
-    font-family: 'Roboto';
 }

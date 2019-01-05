@@ -1,3 +1,27 @@
-<p>
-  degree-program-detail works!
-</p>
+<div class="degree-program">
+    <ng-container *ngIf="(degreeProgram$ | async) as degreeProgram">
+        <h2>{{degreeProgram?.title}}</h2>
+    </ng-container>
+
+    <mat-form-field class="search-bar">
+        <input matInput placeholder="Suchtext" #searchInput autocomplete="off">
+    </mat-form-field>
+
+    <table class="courses-table mat-elevation-z7" *ngIf="(courses$ | async) as courses">
+
+        <thead>
+            <th>Semester</th>
+            <th>Title</th>
+            <th>ECTS</th>
+        </thead>
+
+        <tr *ngFor="let course of courses">
+            <td class="seqno-cell">{{course.semester}}</td>
+            <td class="description-cell">{{course.title}}</td>
+            <td class="number-cell">{{course.ects}}</td>
+        </tr>
+
+    </table>
+
+
+</div>

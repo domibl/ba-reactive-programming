@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Studiengang bearbeiten</h2>
+
+<mat-dialog-content [formGroup]="form">
+
+    <mat-form-field>
+        <input matInput placeholder="Titel" formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Akademischer Abschluss" formControlName="academicDegree">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Studiumstyp" formControlName="degreeProgramType">
+            <mat-option value="Bachelorstudium">
+                Bachelorstudium</mat-option>
+            <mat-option value="Masterstudium">
+                Masterstudium</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Organisation" formControlName="organizationType">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="ECTS" formControlName="ects">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Anzahl Semester" formControlName="semesterCount">
+    </mat-form-field>
+
+    <mat-form-field>
+        <textarea matInput placeholder="Beschreibung" formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"></textarea>
+    </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+    <button class="mat-raised-button" (click)="close()">
+        Schließen
+    </button>
+
+    <button class="mat-raised-button mat-primary" #saveButton (click)="save()">
+        Speichern
+    </button>
+
+</mat-dialog-actions>

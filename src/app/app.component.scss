@@ -14,12 +14,21 @@
 .mat-toolbar.mat-primary {
     position: sticky;
     top: 0;
+    z-index: 99999;
 }
 
 .content-margin{
-    margin: 15px;
+    margin-top: 15;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    z-index: 0;
 }
 
 .icon-label-margin{
     margin-left: 5px;
+}
+
+.scrollable-div{
+    overflow: auto;
 }

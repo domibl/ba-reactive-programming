@@ -1,0 +1,30 @@
+<mat-card *ngFor="let degreeProgram of (degreePrograms$ | async)" class="course-card mat-elevation-z10">
+
+    <mat-card-header>
+        <mat-card-title>
+            <h1 class="mat-headline">{{degreeProgram.title}}</h1>
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{degreeProgram.degreeProgramType}}, {{degreeProgram.organizationType}}
+        </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mat-body" style="margin-left: 8px;">
+        <p>{{degreeProgram.semesterCount}} Semester ({{degreeProgram.ects}} ECTS)</p>
+        <p>Abschluss: {{degreeProgram.academicDegree}}</p>
+        <p>{{degreeProgram.description}}</p>
+    </mat-card-content>
+
+    <mat-card-actions class="course-actions">
+
+        <button mat-raised-button class="mat-button mat-primary" [routerLink]="['/degree-programs', degreeProgram.id]">
+            Details
+        </button>
+
+        <button mat-raised-button class="mat-button mat-accent" (click)="editDegreeProgram(degreeProgram)">
+            Bearbeiten
+        </button>
+
+    </mat-card-actions>
+
+</mat-card>

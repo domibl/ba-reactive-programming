@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { DEGREEPROGRAMMS, COURSES } from "./db-data";
+import { DEGREEPROGRAMS, COURSES } from "./db-data";
 import { DegreeProgram } from 'src/app/model/degree-program';
 import { Course } from 'src/app/model/course';
 
@@ -17,7 +17,7 @@ export function getAllDegreePrograms(req: Request, res: Response) {
         else { */
 
     setTimeout(() => {
-        res.status(200).json(DEGREEPROGRAMMS);
+        res.status(200).json(DEGREEPROGRAMS);
     }, 200);
 
     //  }
@@ -26,10 +26,28 @@ export function getAllDegreePrograms(req: Request, res: Response) {
 
 export function getDegreeProgramById(req: Request, res: Response) {
     const degreeProgramId = req.params["id"];
-    const degreeProgrammes: DegreeProgram[] = DEGREEPROGRAMMS;
+    const degreeProgrammes: DegreeProgram[] = DEGREEPROGRAMS;
     const degreeProgram: DegreeProgram = degreeProgrammes.find(degreeProgram => degreeProgram.id == degreeProgramId);
 
     res.status(200).json(degreeProgram);
+}
+
+export function saveDegreeProgram(req: Request, res: Response) {
+
+    const id = req.params["id"],
+        changes = req.body;
+
+    console.log("Saving degree program", id, JSON.stringify(changes));
+
+    let index: number = DEGREEPROGRAMS.findIndex((degreeProgram, index) => degreeProgram.id == id);
+    DEGREEPROGRAMS[index] = {
+        ...DEGREEPROGRAMS[index],
+        ...changes
+    };
+
+    setTimeout(() => {
+        res.status(200).json(DEGREEPROGRAMS[index]);
+    }, 2000);
 }
 
 export function getCoursesFiltered(req: Request, res: Response) {
@@ -45,7 +63,7 @@ export function getCoursesFiltered(req: Request, res: Response) {
     let courses: Course[] = COURSES.filter(course => course.degreeProgramId == degreeProgramId).sort((l1, l2) => l1.id - l2.id);
 
     if (filter) {
-        courses = courses.filter(course => course.description.trim().toLowerCase().search(filter.toLowerCase()) >= 0);
+        courses = courses.filter(course => course.title.trim().toLowerCase().search(filter.toLowerCase()) >= 0);
     }
 
     if (sortOrder == "desc") {
@@ -59,22 +77,4 @@ export function getCoursesFiltered(req: Request, res: Response) {
     setTimeout(() => {
         res.status(200).json(coursesPage);
     }, 1000);
-}
-
-export function saveCourse(req: Request, res: Response) {
-
-    const id = req.params["id"],
-        changes = req.body;
-
-    console.log("Saving course", id, JSON.stringify(changes));
-
-    let index: number = COURSES.findIndex((course, index) => course.id == id);
-    COURSES[index] = {
-        ...COURSES[index],
-        ...changes
-    };
-
-    setTimeout(() => {
-        res.status(200).json(COURSES[index]);
-    }, 2000);
 }
