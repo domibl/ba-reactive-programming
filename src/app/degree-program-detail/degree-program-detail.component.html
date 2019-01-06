@@ -1,27 +1,58 @@
-<div class="degree-program">
-    <ng-container *ngIf="(degreeProgram$ | async) as degreeProgram">
-        <h2>{{degreeProgram?.title}}</h2>
-    </ng-container>
+<div>
+    <div *ngIf="(degreeProgram$ | async) as degreeProgram">
+        <h2 class="mat-headline" style="margin-top: 15px">{{degreeProgram?.title}}</h2>
+    </div>
 
-    <mat-form-field class="search-bar">
-        <input matInput placeholder="Suchtext" #searchInput autocomplete="off">
+    <mat-form-field>
+        <input matInput placeholder="Filter Text" #searchInput autocomplete="off">
     </mat-form-field>
+</div>
 
-    <table class="courses-table mat-elevation-z7" *ngIf="(courses$ | async) as courses">
+<div class="container">
+    <div class="loading-shade" *ngIf="isLoadingResults || noDataAvailable">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        <div class="no-data-available" *ngIf="noDataAvailable">
+            Keine Kurse verfügbar
+        </div>
+    </div>
 
-        <thead>
-            <th>Semester</th>
-            <th>Title</th>
-            <th>ECTS</th>
-        </thead>
+    <div class="table-container">
+        <table mat-table [dataSource]="(courses$ | async)" class="table"
+               matSort matSortActive="semester" matSortDisableClear matSortDirection="asc">
+            <!-- Semester Column -->
+            <ng-container matColumnDef="semester">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Semester </th>
+                <td mat-cell *matCellDef="let element"> {{element.semester}} </td>
+            </ng-container>
 
-        <tr *ngFor="let course of courses">
-            <td class="seqno-cell">{{course.semester}}</td>
-            <td class="description-cell">{{course.title}}</td>
-            <td class="number-cell">{{course.ects}}</td>
-        </tr>
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef> Titel </th>
+                <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+            </ng-container>
 
-    </table>
+            <!-- Course Type Column -->
+            <ng-container matColumnDef="courseType">
+                <th mat-header-cell *matHeaderCellDef> Typ </th>
+                <td mat-cell *matCellDef="let element"> {{element.courseType}} </td>
+            </ng-container>
 
+            <!-- Exam Type Column -->
+            <ng-container matColumnDef="examType">
+                <th mat-header-cell *matHeaderCellDef> Prüfungsart </th>
+                <td mat-cell *matCellDef="let element"> {{element.examType}} </td>
+            </ng-container>
 
+            <!-- ECTS Column -->
+            <ng-container matColumnDef="ects">
+                <th mat-header-cell *matHeaderCellDef> ECTS </th>
+                <td mat-cell *matCellDef="let element"> {{element.ects}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <mat-paginator [length]="resultsLength" [pageSize]="5"></mat-paginator>
 </div>

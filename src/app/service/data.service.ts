@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { DegreeProgram } from '../model/degree-program';
 import { HttpClient } from '@angular/common/http';
 import { tap, retry, map, filter } from 'rxjs/operators';
-import { Course } from '../model/course';
+import { CoursePage } from '../model/coursePage';
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +29,8 @@ export class DataService {
     }
 
     getDegreeProgramById(degreeProgramId: number): Observable<DegreeProgram>{
+        if(this.behaviourSubject.getValue().length == 0)
+            this.getDegreePrograms();
         return this.degreePrograms$
             .pipe(
                 map(degreePrograms => degreePrograms.find(degreeProgram => degreeProgram.id == degreeProgramId)),
@@ -46,15 +48,15 @@ export class DataService {
             ...changes
         };
 
-        this.behaviourSubject.next(newDegreePrograms);
         return this.http.put(`/api/degree-programs/${degreeProgramId}`, changes).pipe(
             tap(() => console.log("HTTP update degree program executed!")),
-            retry(3)
+            retry(3),
+            tap(() => this.behaviourSubject.next(newDegreePrograms))
         );
     }
 
-    getCourses(filter: string): Observable<Course[]>{
-        return this.http.get<Course[]>(`/api/courses?${filter}`).pipe(
+    getCourses(filter: string): Observable<CoursePage>{
+        return this.http.get<CoursePage>(`/api/courses?${filter}`).pipe(
             tap(() => console.log("HTTP get courses executed!")),
             retry(3)
         );

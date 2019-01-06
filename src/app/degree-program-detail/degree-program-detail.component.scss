@@ -1,51 +1,38 @@
-
-.degree-program {
+/* Structure */
+.container {
+    position: relative;
+}
+  
+.table-container {
+    position: relative;
+    max-height: 400px;
+    overflow: auto;
+}
+  
+table {
+    width: 100%;
+}
+  
+.loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.no-data-available {
+    color: #980000;
+    max-width: 360px;
     text-align: center;
-    max-width: 390px;
-    margin: 0 auto;
 }
-
-.description-cell {
-    text-align: left;
-    margin: 10px auto;
-}
-
-.duration-cell {
-    text-align: center;
-}
-
-.number-cell {
-    text-align: right;
-}
-
-.duration-cell mat-icon {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 20px;
-}
-
-.courses-table {
-    min-height: 360px;
-    margin-top: 10px;
-}
-
-.search-bar {
-    margin-top: 20px;
-}
-
-.courses-table tr {
-    height: 60px;
-}
-
-.courses-table td {
-    border-top: 1px solid  rgba(0,0,0,.12);
-}
-
-.courses-table th {
-    padding: 20px;
-    color: rgba(0,0,0,.54);
-}
-
-.courses-table td {
-    padding: 10px;
+  
+.mat-column-number,
+.mat-column-state {
+    max-width: 64px;
 }

@@ -1,3 +1,22 @@
-<p>
-  playground works!
-</p>
+<mat-grid-list cols="2" rowHeight="100px">
+    <mat-grid-tile>
+        <mat-card>
+            Hot Observable, Kurs Observer 1: {{exchange1 | number}}
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card>
+            Hot Observable, Kurs Observer 2: {{exchange2 | number}}
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card>
+            Cold Observable, Kurs Observer 1: {{exchange3 | number}}
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card>
+            Cold Observable, Kurs Observer 2: {{exchange4 | number}}
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>

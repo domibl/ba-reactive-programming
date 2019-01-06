@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { from, Observable, Subject, asyncScheduler, interval, fromEvent, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, share } from 'rxjs/operators';
+import { DataService } from '../service/data.service';
 
 @Component({
     selector: 'app-playground',
@@ -9,7 +10,15 @@ import { filter, map } from 'rxjs/operators';
 })
 export class PlaygroundComponent implements OnInit {
 
-    constructor() { }
+    stockExchangeShared$: Observable<number>;
+    stockExchange$: Observable<number>;
+
+    exchange1: number = 0;
+    exchange2: number = 0;
+    exchange3: number = 0;
+    exchange4: number = 0;
+
+    constructor(private dataService: DataService) { }
 
     ngOnInit() {
         // this.createSimpleObservable();
@@ -18,6 +27,29 @@ export class PlaygroundComponent implements OnInit {
         // this.createObservalbes();
         // this.cancelSequence();
         // this.filterNumbers();
+        this.stockExchangeTicker();
+    }
+
+    stockExchangeTicker(){
+        this.stockExchangeShared$ = interval(1000).pipe(
+            map(() => Math.random() * 10),
+            share()
+        );
+
+        this.stockExchange$ = interval(1000).pipe(
+            map(() => Math.random() * 10)
+        );
+
+        this.stockExchangeShared$.subscribe(data => this.exchange1 = data);
+        this.stockExchange$.subscribe(data => this.exchange3 = data);
+            
+        setTimeout(() => {
+            this.stockExchangeShared$.subscribe(data => this.exchange2 = data);    
+        }, 5000);
+
+        setTimeout(() => {
+            this.stockExchange$.subscribe(data => this.exchange4 = data);
+        }, 5000);
     }
 
     createObservalbes() {

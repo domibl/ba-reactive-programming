@@ -7,20 +7,19 @@ import { Course } from 'src/app/model/course';
 
 export function getAllDegreePrograms(req: Request, res: Response) {
     // simulate errors to check error handling
-    /*
-        const error = (Math.random() >= 0.5);
+    const error = (Math.random() >= 0.5);
 
-        if (error) {
-            console.log("ERROR loading degree programms!");
-            res.status(500).json({message: 'random error occurred.'});
-        }
-        else { */
+    if (error) {
+        console.log("ERROR loading degree programms!");
+        res.status(500).json({ message: 'random error occurred.' });
+    }
+    else {
 
-    setTimeout(() => {
-        res.status(200).json(DEGREEPROGRAMS);
-    }, 200);
+        setTimeout(() => {
+            res.status(200).json(DEGREEPROGRAMS);
+        }, 200);
 
-    //  }
+    }
 }
 
 
@@ -47,7 +46,7 @@ export function saveDegreeProgram(req: Request, res: Response) {
 
     setTimeout(() => {
         res.status(200).json(DEGREEPROGRAMS[index]);
-    }, 2000);
+    }, 500);
 }
 
 export function getCoursesFiltered(req: Request, res: Response) {
@@ -60,7 +59,7 @@ export function getCoursesFiltered(req: Request, res: Response) {
         pageNumber = parseInt(queryParams.pageNumber) || 0,
         pageSize = parseInt(queryParams.pageSize) || 3;
 
-    let courses: Course[] = COURSES.filter(course => course.degreeProgramId == degreeProgramId).sort((l1, l2) => l1.id - l2.id);
+    let courses: Course[] = COURSES.filter(course => course.degreeProgramId == degreeProgramId).sort((l1, l2) => l1.semester - l2.semester);
 
     if (filter) {
         courses = courses.filter(course => course.title.trim().toLowerCase().search(filter.toLowerCase()) >= 0);
@@ -75,6 +74,6 @@ export function getCoursesFiltered(req: Request, res: Response) {
     const coursesPage: Course[] = courses.slice(initialPos, initialPos + pageSize);
 
     setTimeout(() => {
-        res.status(200).json(coursesPage);
-    }, 1000);
+        res.status(200).json({ items: coursesPage, totalCount: courses.length });
+    }, 500);
 }
