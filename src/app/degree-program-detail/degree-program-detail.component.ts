@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Observable, fromEvent, concat, merge, of, from, observable } from 'rxjs';
+import { Observable, fromEvent, concat, merge, of, from, observable, combineLatest } from 'rxjs';
 import { DegreeProgram } from '../model/degree-program';
 import { Course } from '../model/course';
 import { DataService } from '../service/data.service';
 import { ActivatedRoute } from '@angular/router';
-import { withLatestFrom, map, debounceTime, distinctUntilChanged, switchMap, startWith, catchError, tap } from 'rxjs/operators';
+import { withLatestFrom, map, debounceTime, distinctUntilChanged, switchMap, startWith, catchError } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatPaginatorIntl } from '@angular/material';
 
 @Component({
@@ -27,7 +27,6 @@ export class DegreeProgramDetailComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     filterChanged$: Observable<any>;
-    searchText: string = '';
 
     @ViewChild('searchInput') input: ElementRef;
 
@@ -62,14 +61,17 @@ export class DegreeProgramDetailComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         // If the user changes the sort order, reset back to the first page.
-        this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+        // this.sort.sortChange.subscribe(() => {
+        //     // this.paginator.page.next({previousPageIndex: 0, pageIndex: 0, pageSize: 5, length: 0})
+        //     this.paginator.pageIndex = 0;
+        // });
 
         this.filterChanged$ = fromEvent<any>(this.input.nativeElement, 'keyup')
             .pipe(
                 map(event => event.target.value),
                 debounceTime(400),
                 distinctUntilChanged(),
-                map(searchText => this.searchText = searchText)
+                startWith('')
             );
 
         this.courses$ = this.loadCourses();
@@ -77,21 +79,21 @@ export class DegreeProgramDetailComponent implements OnInit, AfterViewInit {
 
 
     loadCourses(): Observable<Course[]> {
-        return merge(this.sort.sortChange, this.paginator.page, this.filterChanged$)
+        return combineLatest(this.sort.sortChange.pipe(startWith({active: "semester", direction: "asc" })), this.paginator.page.pipe(startWith({previousPageIndex: 0, pageIndex: 0, pageSize: 5, length: 0})), this.filterChanged$)
             .pipe(
-                startWith([]),
-                switchMap(() => {
+                switchMap(([sort, page, filter]) => {
+                    console.log(sort);
+                    console.log(page);
+                    console.log(filter);
                     this.isLoadingResults = true;
-                    return this.dataService!.getCourses(`degreeProgramId=${this.degreeProgramId}&pageSize=${this.paginator.pageSize}&pageNumber=${this.paginator.pageIndex}&sortOrder=${this.sort.direction}&filter=${this.searchText}`);
+                    return this.dataService!.getCourses(`degreeProgramId=${this.degreeProgramId}&pageSize=${page.pageSize}&pageNumber=${page.pageIndex}&sortOrder=${sort.direction}&filter=${filter}`);
                 }),
                 map(data => {
                     // Flip flag to show that loading has finished.
                     this.isLoadingResults = false;
                     this.errorOccured = false;
                     this.resultsLength = data.totalCount;
-                    return Observable.create((observable) => {
-                        observable.next(data.items);
-                    });
+                    return data.items;
                 }),
                 catchError(() => {
                     this.isLoadingResults = false;

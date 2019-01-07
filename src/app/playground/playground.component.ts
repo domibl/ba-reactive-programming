@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { from, Observable, Subject, asyncScheduler, interval, fromEvent, of } from 'rxjs';
-import { filter, map, share } from 'rxjs/operators';
+import { from, Observable, Subject, asyncScheduler, interval, fromEvent, of, combineLatest } from 'rxjs';
+import { filter, map, share, startWith } from 'rxjs/operators';
 import { DataService } from '../service/data.service';
 
 @Component({
@@ -28,6 +28,25 @@ export class PlaygroundComponent implements OnInit {
         // this.cancelSequence();
         // this.filterNumbers();
         this.stockExchangeTicker();
+        this.sumRepresentation();
+    }
+
+    sumRepresentation(){
+        let a: Observable<number> = interval(2000).pipe(
+            map(() => Math.round(Math.random() * 10)),
+            startWith(0)
+        )
+
+        let b: Observable<number> = interval(5000).pipe(
+            map(() => Math.round(Math.random() * 10)),
+            startWith(0)
+        )
+
+        let sum: Observable<number> = combineLatest(a, b, (a, b) => a + b);
+
+        a.subscribe(data => console.log(`a: ${data}`));
+        b.subscribe(data => console.log(`b: ${data}`));
+        sum.subscribe(data => console.log(`sum: ${data}`));
     }
 
     stockExchangeTicker(){
