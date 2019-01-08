@@ -34,11 +34,13 @@ export class PlaygroundComponent implements OnInit {
     sumRepresentation(){
         let a: Observable<number> = interval(2000).pipe(
             map(() => Math.round(Math.random() * 10)),
+            share(),
             startWith(0)
         )
 
         let b: Observable<number> = interval(5000).pipe(
             map(() => Math.round(Math.random() * 10)),
+            share(),
             startWith(0)
         )
 
