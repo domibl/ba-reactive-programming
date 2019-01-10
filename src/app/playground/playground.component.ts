@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { from, Observable, Subject, asyncScheduler, interval, fromEvent, of, combineLatest } from 'rxjs';
-import { filter, map, share, startWith } from 'rxjs/operators';
+import { from, Observable, Subject, asyncScheduler, interval, fromEvent, of, combineLatest, range, zip } from 'rxjs';
+import { filter, map, share, startWith, catchError, retry, mergeMap, retryWhen, tap, take, concatAll, flatMap, switchMap, delay } from 'rxjs/operators';
 import { DataService } from '../service/data.service';
+import { ErrorStateMatcher } from '@angular/material';
 
 @Component({
     selector: 'app-playground',
@@ -27,8 +28,81 @@ export class PlaygroundComponent implements OnInit {
         // this.createObservalbes();
         // this.cancelSequence();
         // this.filterNumbers();
-        this.stockExchangeTicker();
-        this.sumRepresentation();
+        // this.stockExchangeTicker();
+        // this.sumRepresentation();
+        // this.errorFlow();
+        // this.errorFlowCatchError();
+        // this.basicRetry();
+        this.advancedRetry();
+    }
+
+    basicRetry(){
+        from([2, 5, 11, 7, 4]).pipe(
+            map(number => {
+                if(number > 10){
+                    throw new Error(`${number} is not between 1 and 10`);
+                }
+                return number;
+            }),
+            retry(1),
+            catchError(error => of(1))
+        ).subscribe(
+            number => console.log(`number: ${number}`),
+            error => console.log(`Caught: ${error}`),
+            () => console.log('completed')
+        );
+    }
+
+    advancedRetry(){
+        from([2, 5, 11, 7, 4]).pipe(
+            map(number => {
+                if(number > 10){
+                    throw new Error(`${number} is not between 1 and 10`);
+                }
+                return number;
+            }),
+            retryWhen(errors => zip(errors, interval(2000).pipe(
+                    map(retryCount => retryCount + 1),
+                    tap((retryCount) => console.log(`retrying after ${2} second(s), retry: ${retryCount}`)),
+                    take(2)
+                ))
+            )
+        ).subscribe(
+            number => console.log(`number: ${number}`),
+            error => console.log(`Caught: ${error}`),
+            () => console.log('completed')
+        );
+    }
+
+    errorFlow(){
+        from([2, 5, 11, 7, 4]).pipe(
+            map(number => {
+                if(number > 10){
+                    throw new Error(`${number} is not between 1 and 10`);
+                }
+                return number;
+            })
+        ).subscribe(
+            number => console.log(`number: ${number}`),
+            error => console.log(`Caught: ${error}`),
+            () => console.log('completed')
+        );
+    }
+
+    errorFlowCatchError(){
+        from([2, 5, 11, 7, 4]).pipe(
+            map(number => {
+                if(number > 10){
+                    throw new Error(`${number} is not between 1 and 10`);
+                }
+                return number;
+            }),
+            catchError(error => of(1))
+        ).subscribe(
+            number => console.log(`number: ${number}`),
+            error => console.log(`Caught: ${error}`),
+            () => console.log('completed')
+        );
     }
 
     sumRepresentation(){
