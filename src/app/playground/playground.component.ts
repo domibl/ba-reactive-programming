@@ -32,8 +32,8 @@ export class PlaygroundComponent implements OnInit {
         // this.sumRepresentation();
         // this.errorFlow();
         // this.errorFlowCatchError();
-        // this.basicRetry();
-        this.advancedRetry();
+        this.basicRetry();
+        // this.advancedRetry();
     }
 
     basicRetry(){
@@ -63,8 +63,7 @@ export class PlaygroundComponent implements OnInit {
             }),
             retryWhen(errors => zip(errors, interval(2000).pipe(
                     map(retryCount => retryCount + 1),
-                    tap((retryCount) => console.log(`retrying after ${2} second(s), retry: ${retryCount}`)),
-                    take(2)
+                    tap((retryCount) => console.log(`retrying after ${2} second(s), retry: ${retryCount}`))
                 ))
             )
         ).subscribe(
